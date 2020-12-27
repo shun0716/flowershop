@@ -1,0 +1,35 @@
+@charset "UTF-8";
+body {
+  margin: 0;
+  padding: 0;
+}
+.Contactdiv {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+#solid {
+  padding: 8px 19px;
+  margin: 2em 0;
+  font-size: 17.5px;
+  border-top: solid 5px #faebd7;
+  border-bottom: solid 5px #faebd7;
+}
+.textarea {
+  text-align: left;
+}
+.soushin {
+  text-align: center;
+  margin: 0 10px;
+}
+#button2 {
+  font-size: 18px;
+  display: inline-block;
+  padding: 0.4em 1em 0.2em;
+  color: #ffffff;
+  border: #ffffff dashed 1px;
+  box-shadow: 0 0 0 0.2em #ffa07a;
+  border-radius: 2.5px;
+  background-color: #ffa07a;
+  cursor: pointer;
+}

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="./css/syohin.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./js/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <title>商品詳細</title>
+    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-auth.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-firestore.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-storage.js"></script>
+    <script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyCu9EUsPEkDUp_BkYQlPfcsp6RBP8tVGaM",
+        authDomain: "ohana-project-d6621.firebaseapp.com",
+        databaseURL: "https://ohana-project-d6621.firebaseio.com",
+        projectId: "ohana-project-d6621",
+        storageBucket: "ohana-project-d6621.appspot.com",
+        messagingSenderId: "1007879495841",
+        appId: "1:1007879495841:web:cb3637620ac50bb35d50e0",
+      };
+      firebase.initializeApp(firebaseConfig);
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  </head>
+  <body>
+    <!-- ヘッダー -->
+    <header class="index_top">
+      <div class="index_top_logo">
+        <a href="./index.html"
+          ><img src="./images/osusume_oniwa_logo.png" alt="タイトルロゴ"
+        /></a>
+      </div>
+
+      <div class="index_top_nav">
+        <div class="index_top_nav_login">
+          <a href="./login.html">Login</a>
+        </div>
+        <div class="index_top_nav_join">
+          <a href="#" id="logout">Join</a>
+        </div>
+        <div class="index_top_nav_cart">
+          <a href="./cart.html"><img src="./images/cart.svg" alt="" /></a>
+        </div>
+      </div>
+    </header>
+    <!-- メインコンテンツ 左文-->
+    <main>
+      <div class="main-container" id="main_syosai_contents"></div>
+    </main>
+    　<!-- カートゾーン -->
+    <div class="cart">
+      <a href="#"
+        ><img
+          onclick="cartin()"
+          src="images/cart2.svg"
+          alt=""
+          width="80px"
+          height="80px"
+      /></a>
+    </div>
+    <!-- フッターエリア -->
+    <footer class="index_footer"></footer>
+  </body>
+  <script>
+    sm = 0;
+    param = "";
+    userID = "";
+    window.onload = function load() {
+      const auth = firebase.auth();
+      auth.onAuthStateChanged(function (user) {
+        if (user) {
+          db.collection("users")
+            .where("uid", "==", user.uid)
+            .get()
+            .then((D) => {
+              userID = D.docs[0].id;
+            });
+        }
+      });
+      const db = firebase.firestore();
+      var pram = decodeURI(location["search"]);
+      pram = pram.replace("?", "");
+      param = pram;
+      //該当商品詮索
+      db.collection("flowerDataBase")
+        .where("Name", "==", String(pram))
+        .get()
+        .then((D) => {
+          op = "";
+          for (let i = 0; i < D.docs[0].data().Color.length; i++) {
+            op +=
+              "<option value=" +
+              D.docs[0].data().Color[i] +
+              ">" +
+              D.docs[0].data().Color[i] +
+              "</option>";
+          }
+          document.getElementById("main_syosai_contents").innerHTML =
+            '<div class="sidebar" onload="start()"><div class="main"><h1>' +
+            D.docs[0].data().Name +
+            "</h1><h2>¥" +
+            D.docs[0].data().Amount +
+            '円<span style="font-size: 1px">&#40;税込&#41;</span></h2><tr><td>数量<input name="cnt" type="text" value="1" size="5" id="cartsum"/></td></tr><br><tr><td>Color<select name="sample" id="selectcolor">' +
+            op +
+            '</select></td></tr><div class="setumei"><h2>商品説明</h2><p>' +
+            D.docs[0].data().Explanation +
+            '</p></div></div></div><div class="maincol"><div id="photoBox"><ul id="photoList"><li><img src="' +
+            D.docs[0].data().images[0] +
+            '" /></li><li><img src="' +
+            D.docs[0].data().images[1] +
+            '" /></li><li><img src="' +
+            D.docs[0].data().images[2] +
+            '" /></li><li><img src="' +
+            D.docs[0].data().images[3] +
+            '" /></li><li><img src="' +
+            D.docs[0].data().images[4] +
+            '" /></li></ul><div id="thumbnailList"><ul><li><a class="thumbnail"><img src="' +
+            D.docs[0].data().images[0] +
+            '" onclick="change(0)"/></a></li><li><a class="thumbnail"><img src="' +
+            D.docs[0].data().images[1] +
+            '" onclick="change(1)"/></a></li><li><a class="thumbnail"><img src="' +
+            D.docs[0].data().images[2] +
+            '" onclick="change(2)"/></a></li><li><a class="thumbnail"><img src="' +
+            D.docs[0].data().images[3] +
+            '" onclick="change(3)"/></a></li><li><a class="thumbnail"><img onload="load()" src="' +
+            D.docs[0].data().images[4] +
+            '" onclick="change(4)"/></a></li></ul></div></div></div> ';
+        });
+    };
+    function load() {
+      for (let i = 1; i < 5; i++) {
+        document.querySelectorAll("#photoList li")[i].style.display = "none";
+      }
+      document.querySelectorAll("#thumbnailList li img")[0].style.border =
+        "solid red ";
+    }
+    function change(D) {
+      if (sm != D) {
+        document.querySelectorAll("#photoList li")[D].style.display = "";
+        document.querySelectorAll("#thumbnailList li img")[D].style.border =
+          "solid red ";
+        document.querySelectorAll("#photoList li")[sm].style.display = "none";
+        document.querySelectorAll("#thumbnailList li img")[sm].style.border =
+          "";
+        sm = D;
+      }
+    }
+    function cartin() {
+      const db = firebase.firestore();
+      db.collection("users")
+        .doc(userID)
+        .update({
+          cart: firebase.firestore.FieldValue.arrayUnion({
+            Color: document.getElementById("selectcolor").value,
+            Name: String(param),
+            Sum: document.getElementById("cartsum").value,
+          }),
+        })
+        .then(() => {
+          console.log("更新成功");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  </script>
+</html>

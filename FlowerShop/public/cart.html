@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>お庭すすめ</title>
+    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-auth.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-firestore.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-storage.js"></script>
+    <script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyCu9EUsPEkDUp_BkYQlPfcsp6RBP8tVGaM",
+        authDomain: "ohana-project-d6621.firebaseapp.com",
+        databaseURL: "https://ohana-project-d6621.firebaseio.com",
+        projectId: "ohana-project-d6621",
+        storageBucket: "ohana-project-d6621.appspot.com",
+        messagingSenderId: "1007879495841",
+        appId: "1:1007879495841:web:cb3637620ac50bb35d50e0",
+      };
+      firebase.initializeApp(firebaseConfig);
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="./css/index.css" />
+    <link rel="stylesheet" href="./css/cart.css" />
+  </head>
+  <body>
+    <header class="index_top">
+      <div class="index_top_logo">
+        <a href="./index.html"
+          ><img src="./images/osusume_oniwa_logo.png" alt="タイトルロゴ"
+        /></a>
+      </div>
+      <div class="index_top_nav">
+        <div class="index_top_nav_login">
+          <a href="./login.html">Login</a>
+        </div>
+        <div class="index_top_nav_join">
+          <a href="#" id="logout">Join</a>
+        </div>
+        <div class="index_top_nav_cart">
+          <a href="#"><img src="./images/cart.svg" alt="" /></a>
+        </div>
+      </div>
+    </header>
+    <div class="cart_main">
+      <div class="cart_main_text">カート詳細</div>
+      <div id="cart" class="cart_main_inner"></div>
+    </div>
+    <footer class="index_footer"></footer>
+    <script>
+      window.addEventListener("load", async () => {
+        uidtxt = "";
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const snap = await db.collection("users").get();
+        let size = snap.size;
+        await auth.onAuthStateChanged(function (user) {
+          if (user) {
+            db.collection("users")
+              .where("uid", "==", user.uid)
+              .get()
+              .then((D) => {
+                if (D.docs[0].data().cart.length == 0) {
+                  document.getElementById("cart").innerHTML =
+                    "<p>商品が存在しないよ</p>";
+                } else {
+                  uidtxt = D.docs[0];
+                  for (let i = 0; i < D.docs[0].data().cart.length; i++) {
+                    db.collection("flowerDataBase")
+                      .where("Name", "==", D.docs[0].data().cart[i].Name)
+                      .get()
+                      .then((Data) => {
+                        console.log(Data.docs[0].data().images[0]);
+                        document.getElementById("cart").innerHTML +=
+                          "<div class='cart_main_inner_cover'><div class='cart_main_inner_img'><img src='" +
+                          Data.docs[0].data().images[0] +
+                          "' alt='' class='cart_img'></div><div class='cart_main_inner_txt'><p>Name: " +
+                          Data.docs[0].data().Name +
+                          "</p><p>Color: " +
+                          D.docs[0].data().cart[i].Color +
+                          "</p><div class='cart_main_inner_input'><input type='number' name='example' value=" +
+                          D.docs[0].data().cart[i].Sum +
+                          " /><button onclick='dele(" +
+                          i +
+                          ")'>削除</button></div></div></div>";
+                      });
+                  }
+                }
+
+                // console.log(D.docs[0].id);
+                // db.collection("users")
+                //   .doc(D.docs[0].id)
+                //   .collection("cart")
+                //   .get()
+                //   .then((Data) => {
+                //     console.log(Data.docs[0].data());
+                //   });
+              })
+              .catch(() => {});
+          } else {
+            document.getElementById("cart").innerHTML =
+              "<p>ログインしてください</p>";
+          }
+        });
+      });
+      function dele(txtnum) {
+        const db = firebase.firestore();
+        db.collection("users")
+          .doc(uidtxt.id)
+          .get()
+          .then((DATA) => {
+            db.collection("users")
+              .doc(uidtxt.id)
+              .update({
+                cart: firebase.firestore.FieldValue.arrayRemove({
+                  Color: DATA.data().cart[txtnum].Color,
+                  Name: DATA.data().cart[txtnum].Name,
+                  Sum: String(DATA.data().cart[txtnum].Sum),
+                }),
+              })
+              .then(() => {
+                console.log("更新成功");
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,148 @@
+.search_main {
+  width: 70%;
+  margin: auto;
+}
+
+.search_main_wrap {
+  width: 50%;
+  margin: auto;
+}
+
+/* カラーピッカー部分 */
+
+.search_main_2_Picker {
+  position: absolute;
+  position: fixed;
+  width: 12%;
+  height: 46.72vw;
+  right: 3%;
+  top: 40%;
+}
+
+.search_main_2_Picker_sum {
+  height: 100%;
+}
+
+.search_main_2_Picker_sum a {
+  position: absolute;
+}
+
+.subPickerimg {
+  height: 4vw;
+}
+
+.subPickerimg:hover {
+  animation: 0.5s scrolleffect forwards;
+}
+
+@keyframes scrolleffect {
+  0% {
+    height: 4vw;
+  }
+  100% {
+    height: 4.5vw;
+  }
+}
+.search_main_2_Picker_sum a:nth-child(1) {
+  top: 1%;
+  left: 37%;
+}
+
+.search_main_2_Picker_sum a:nth-child(2) {
+  top: 3.5%;
+  left: 59%;
+  transform: rotateZ(45deg);
+}
+
+.search_main_2_Picker_sum a:nth-child(3) {
+  top: 9.3%;
+  left: 62%;
+  transform: rotateZ(100deg);
+}
+
+.search_main_2_Picker_sum a:nth-child(4) {
+  top: 14%;
+  left: 47%;
+  transform: rotateZ(155deg);
+}
+
+.search_main_2_Picker_sum a:nth-child(5) {
+  top: 14%;
+  left: 25%;
+  transform: rotateZ(200deg);
+}
+
+.search_main_2_Picker_sum a:nth-child(6) {
+  top: 9.3%;
+  left: 13%;
+  transform: rotateZ(250deg);
+}
+
+.search_main_2_Picker_sum a:nth-child(7) {
+  top: 3.5%;
+  left: 18%;
+  transform: rotateZ(300deg);
+}
+
+/* カラーピッカー部分終 */
+.search_main_wrap p {
+  width: 100%;
+  text-align: center;
+  margin: 3vh 0;
+}
+
+.search_Picker {
+  position: relative;
+  width: 100%;
+}
+.search_main_img {
+  width: 100%;
+}
+.search_main_result {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.search_main_result_element {
+  width: 50%;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 5vw;
+}
+
+.search_main_result_element_p {
+  width: 50%;
+  text-align: center;
+}
+
+.search_main_result_element_p p:nth-child(1) {
+  font-size: 2vw;
+  padding: 0.7vw;
+}
+.search_main_result_element_p p:nth-child(2) {
+  font-size: 1vw;
+  padding: 0.7vw;
+}
+.search_main_result_element_p p:nth-child(3) {
+  font-size: 1vw;
+  padding: 0.7vw;
+}
+
+.search_main_result_element_p button {
+  position: relative;
+  border: none;
+  background-color: #999;
+  border-radius: 10px;
+  padding: 5px 3vw;
+}
+.search_main_result img {
+  width: 50%;
+  border-radius: 360px;
+}

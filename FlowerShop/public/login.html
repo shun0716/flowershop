@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>お庭すすめ</title>
+    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-auth.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-firestore.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-storage.js"></script>
+    <script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyCu9EUsPEkDUp_BkYQlPfcsp6RBP8tVGaM",
+        authDomain: "ohana-project-d6621.firebaseapp.com",
+        databaseURL: "https://ohana-project-d6621.firebaseio.com",
+        projectId: "ohana-project-d6621",
+        storageBucket: "ohana-project-d6621.appspot.com",
+        messagingSenderId: "1007879495841",
+        appId: "1:1007879495841:web:cb3637620ac50bb35d50e0",
+      };
+      firebase.initializeApp(firebaseConfig);
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="./css/login.css" />
+  </head>
+  <body>
+    <div class="login">
+      <h1>
+        <div class="login_logo">
+          <a href="./index.html"
+            ><img src="./images/osusume_oniwa_logo.png" alt="タイトルロゴ"
+          /></a>
+        </div>
+      </h1>
+      <input
+        type="text"
+        name="u"
+        placeholder="メールアドレス"
+        required="required"
+        id="logMail"
+      />
+      <input
+        type="password"
+        name="p"
+        placeholder="パスワード"
+        required="required"
+        id="logPass"
+      />
+      <button
+        type="submit"
+        class="btn btn-primary btn-block btn-large"
+        id="signin"
+      >
+        ログイン
+      </button>
+      <div class="login-help">
+        <p>Forgot your password? <a href="#">Click here to reset it</a>.</p>
+      </div>
+      <div class="login_icon_tw">
+        <a href="#" id="twitter"
+          ><img
+            src="https://img.icons8.com/color/48/000000/twitter-circled.png"
+        /></a>
+      </div>
+      <div class="create_new">
+        <a id="newlog" href="javascript:void(0)"> 新規登録はこちらへ </a>
+        <div id="newlog_style" style="display: none">
+          <input
+            type="text"
+            name="n"
+            placeholder="お名前"
+            required="required"
+            id="Name"
+          />
+          <input
+            type="text"
+            name="u"
+            placeholder="メールアドレス"
+            required="required"
+            id="Mail"
+          />
+          <input
+            type="password"
+            name="p"
+            placeholder="パスワード"
+            required="required"
+            id="Pass"
+          />
+          <button
+            type="submit"
+            class="btn btn-primary btn-block btn-large"
+            id="create"
+          >
+            新規登録
+          </button>
+        </div>
+      </div>
+    </div>
+    <footer class="index_footer"></footer>
+    <script>
+      window.addEventListener("load", async () => {
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const snap = await db.collection("users").get();
+        let size = snap.size;
+        await auth.onAuthStateChanged(function (user) {
+          if (user) {
+            console.log("ログインしてるよ");
+          } else {
+            console.log("no login");
+          }
+        });
+      });
+
+      document.getElementById("newlog").addEventListener("click", () => {
+        if (document.getElementById("newlog_style").style.display === "none") {
+          document.getElementById("newlog_style").style.display = "block";
+        } else {
+          document.getElementById("newlog_style").style.display = "none";
+        }
+      });
+
+      //ログイン(twitter)用////////////////////////////////////////////////////////////////////////////////////
+      document.getElementById("twitter").addEventListener("click", async () => {
+        var provider = new firebase.auth.TwitterAuthProvider();
+        firebase.auth().signInWithRedirect(provider);
+      });
+
+      //初期登録用(メールアドレス用)////////////////////////////////////////////////////////////////////////////////
+      document.getElementById("create").addEventListener("click", async () => {
+        const db = firebase.firestore();
+        const email = document.getElementById("Mail").value;
+        const Name = document.getElementById("Name").value;
+        const passwd = document.getElementById("Pass").value;
+        const snap = await db.collection("users").get();
+        let size = snap.size;
+        firebase
+          .auth()
+          .createUserWithEmailAndPassword(email, passwd)
+          .then((D) => {
+            console.log("Success");
+            db.collection("users")
+              .add({
+                ID: size + 1, //ユーザーID
+                Name: Name, //ユーザーネーム
+                cart: [], //カート
+                uid: D.user.uid,
+              })
+              .then(() => {
+                console.log("書き込み成功");
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+      });
+
+      //サインイン専用///////////////////////////////////////////////////////////////////////
+      document.getElementById("signin").addEventListener("click", () => {
+        const db = firebase.firestore();
+        const email = document.getElementById("logMail").value;
+        const passwd = document.getElementById("logPass").value;
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(email, passwd)
+          .then((nanika) => {
+            console.log("ログイン成功");
+          })
+          .catch((err) => {
+            console.log("サインイン失敗!");
+            console.log(err);
+          });
+      });
+    </script>
+  </body>
+</html>

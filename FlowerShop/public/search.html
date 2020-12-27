@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>お庭すすめ</title>
+    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-auth.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-firestore.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-storage.js"></script>
+    <script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyCu9EUsPEkDUp_BkYQlPfcsp6RBP8tVGaM",
+        authDomain: "ohana-project-d6621.firebaseapp.com",
+        databaseURL: "https://ohana-project-d6621.firebaseio.com",
+        projectId: "ohana-project-d6621",
+        storageBucket: "ohana-project-d6621.appspot.com",
+        messagingSenderId: "1007879495841",
+        appId: "1:1007879495841:web:cb3637620ac50bb35d50e0",
+      };
+      firebase.initializeApp(firebaseConfig);
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="./css/index.css" />
+    <link rel="stylesheet" href="./css/search.css" />
+  </head>
+  <body>
+    <header class="index_top">
+      <div class="index_top_logo">
+        <a href="./index.html"
+          ><img src="./images/osusume_oniwa_logo.png" alt="タイトルロゴ"
+        /></a>
+      </div>
+      <div class="index_top_nav">
+        <div class="index_top_nav_login">
+          <a href="./login.html">Login</a>
+        </div>
+        <div class="index_top_nav_join">
+          <a href="#" id="logout">Join</a>
+        </div>
+        <div class="index_top_nav_cart">
+          <a href="./cart.html"><img src="./images/cart.svg" alt="" /></a>
+        </div>
+      </div>
+    </header>
+    <main class="search_main">
+      <div class="search_main_2_Picker">
+        <img
+          src="./images/color_picker/color_bg3.png"
+          alt="ピッカー背景"
+          class="search_Picker"
+        />
+        <div class="search_main_2_Picker_sum">
+          <a href="#"
+            ><img
+              src="./images/color_picker/color_1.png"
+              alt="Picker"
+              class="subPickerimg"
+              onclick="func1('red')"
+          /></a>
+          <a href="#"
+            ><img
+              src="./images/color_picker/color_2.png"
+              alt="Picker"
+              class="subPickerimg"
+              onclick="func1('green')"
+          /></a>
+          <a href="#"
+            ><img
+              src="./images/color_picker/color_3.png"
+              alt="Picker"
+              class="subPickerimg"
+              onclick="func1('yellow')"
+          /></a>
+          <a href="#"
+            ><img
+              src="./images/color_picker/color_4.png"
+              alt="Picker"
+              class="subPickerimg"
+              onclick="func1('blue')"
+          /></a>
+          <a href="#"
+            ><img
+              src="./images/color_picker/color_5.png"
+              alt="Picker"
+              class="subPickerimg"
+              onclick="func1('white')"
+          /></a>
+          <a href="#"
+            ><img
+              src="./images/color_picker/color_6.png"
+              alt="Picker"
+              class="subPickerimg"
+              onclick="func1('purple')"
+          /></a>
+          <a href="#"
+            ><img
+              src="./images/color_picker/color_7.png"
+              alt="Picker"
+              class="subPickerimg"
+              onclick="func1('black')"
+          /></a>
+        </div>
+      </div>
+      <div class="search_main_wrap">
+        <img
+          src="./images/title_ichiran.png"
+          alt="一覧"
+          class="search_main_img"
+        />
+        <div class="index_main_2_search">
+          <form>
+            <input type="text" class="index_main_2_search_text" id="text" />
+            <input
+              type="button"
+              value="検索"
+              class="index_main_2_search_btn"
+              onclick="textsearch()"
+            />
+          </form>
+        </div>
+        <p id="searchres">"赤"検索結果</p>
+      </div>
+      <div class="search_main_result" id="result"></div>
+    </main>
+    <footer class="index_footer"></footer>
+    <!-- script//////////////////////////////////////////////////////////////// -->
+
+    <script>
+      window.onload = function () {
+        var pram = decodeURI(location["search"]);
+        pram = pram.replace("?", "");
+        //あとで直したい
+        func1(pram);
+      };
+
+      function textsearch() {
+        const input_message = document.getElementById("text").value;
+        const db = firebase.firestore();
+        document.getElementById("searchres").innerHTML =
+          '<p>"' + input_message + '"の検索結果</p>';
+        db.collection("flowerDataBase")
+          .where("Name", "==", String(input_message))
+          .get()
+          .then((D) => {
+            if (D.size >= 1) {
+              document.getElementById("result").innerHTML = "";
+              for (let i = 0; i < D.size; i++) {
+                document.getElementById("result").innerHTML +=
+                  "<div class='search_main_result_element'><img src=" +
+                  D.docs[i].data().images[0] +
+                  " alt=''><div class='search_main_result_element_p'><p>" +
+                  D.docs[i].data().Name +
+                  "</p><p>" +
+                  D.docs[i].data().Color +
+                  "</p><p>" +
+                  D.docs[i].data().Amount +
+                  "￥</p><button onsubmit='syhousai()'>詳細 ></button></div></div>";
+                // D.docs[0].data().images[1] +
+                // ' alt="">';
+              }
+            } else {
+              db.collection("flowerDataBase")
+                .where("Name4", "==", input_message)
+                .get()
+                .then((D) => {
+                  document.getElementById("result").innerHTML = D.size;
+                });
+            }
+          });
+      }
+
+      function func1(pram) {
+        // const input_message = document.getElementById("search").value;
+        const input_message = pram;
+        const db = firebase.firestore();
+        document.getElementById("searchres").innerHTML =
+          '<p>"' + pram + '"の検索結果</p>';
+        db.collection("flowerDataBase")
+          .where("Color", "array-contains", input_message)
+          .get()
+          .then((D) => {
+            if (D.size >= 1) {
+              document.getElementById("result").innerHTML = "";
+              for (let i = 0; i < D.size; i++) {
+                document.getElementById("result").innerHTML +=
+                  "<div class='search_main_result_element'><img src=" +
+                  D.docs[i].data().images[0] +
+                  " alt=''><div class='search_main_result_element_p'><p class='FlowerName'>" +
+                  D.docs[i].data().Name +
+                  "</p><p>" +
+                  D.docs[i].data().Color +
+                  "</p><p>" +
+                  D.docs[i].data().Amount +
+                  "￥</p><button onclick='syhousai(" +
+                  i +
+                  ")'>詳細 ></button></div></div>";
+                // D.docs[0].data().images[1] +
+                // ' alt="">';
+              }
+            } else {
+              db.collection("flowerDataBase")
+                .where("Name", "==", String(input_message))
+                .get()
+                .then((D) => {
+                  if (D.size >= 1) {
+                    document.getElementById("result").innerHTML = "";
+                    for (let i = 0; i < D.size; i++) {
+                      document.getElementById("result").innerHTML +=
+                        "<div class='search_main_result_element'><img src=" +
+                        D.docs[i].data().images[0] +
+                        " alt=''><div class='search_main_result_element_p'><p>" +
+                        D.docs[i].data().Name +
+                        "</p><p>" +
+                        D.docs[i].data().Color +
+                        "</p><p>" +
+                        D.docs[i].data().Amount +
+                        "￥</p><button onsubmit='syhousai()'>詳細 ></button></div></div>";
+                      // D.docs[0].data().images[1] +
+                      // ' alt="">';
+                    }
+                  } else {
+                    db.collection("flowerDataBase")
+                      .where("Name4", "==", input_message)
+                      .get()
+                      .then((D) => {
+                        document.getElementById("result").innerHTML = D.size;
+                      });
+                  }
+                });
+            }
+          });
+      }
+      function syhousai(D) {
+        var pram = document.getElementsByClassName("FlowerName")[D].textContent;
+        location.href = "/syohin.html?" + pram;
+      }
+    </script>
+  </body>
+</html>

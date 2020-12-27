@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>お庭すすめ</title>
+    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-auth.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-firestore.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/7.8.2/firebase-storage.js"></script>
+    <script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyCu9EUsPEkDUp_BkYQlPfcsp6RBP8tVGaM",
+        authDomain: "ohana-project-d6621.firebaseapp.com",
+        databaseURL: "https://ohana-project-d6621.firebaseio.com",
+        projectId: "ohana-project-d6621",
+        storageBucket: "ohana-project-d6621.appspot.com",
+        messagingSenderId: "1007879495841",
+        appId: "1:1007879495841:web:cb3637620ac50bb35d50e0",
+      };
+      firebase.initializeApp(firebaseConfig);
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="./css/index.css" />
+  </head>
+  <body>
+    <header class="index_top">
+      <div class="index_top_logo">
+        <a href="#"
+          ><img src="./images/osusume_oniwa_logo.png" alt="タイトルロゴ"
+        /></a>
+      </div>
+      <div class="index_top_nav">
+        <div class="index_top_nav_login">
+          <a href="./login.html">Login</a>
+        </div>
+        <div class="index_top_nav_join">
+          <a href="#" id="logout">Join</a>
+        </div>
+        <div class="index_top_nav_cart">
+          <a href="./cart.html"><img src="./images/cart.svg" alt="" /></a>
+        </div>
+      </div>
+    </header>
+    <main class="index_main">
+      <div class="index_main_1" id="slideshow">
+        <a href="#"
+          ><img src="./images/mainvisuals/mainVisual_bg0.png" alt="TOP画像"
+        /></a>
+        <a href="#"
+          ><img src="./images/mainvisuals/mainVisual_bg1.png" alt="TOP画像"
+        /></a>
+        <a href="#"
+          ><img src="./images/mainvisuals/mainVisual_bg2.png" alt="TOP画像"
+        /></a>
+        <a href="#"
+          ><img src="./images/mainvisuals/mainVisual_bg3.png" alt="TOP画像"
+        /></a>
+        <a href="#"
+          ><img src="./images/mainvisuals/mainVisual_bg4.png" alt="TOP画像"
+        /></a>
+      </div>
+      <div class="index_main_2">
+        <div class="index_main_2_Picker">
+          <img
+            src="./images/color_picker/color_bg2.png"
+            alt="ピッカー背景"
+            class="Picker"
+          />
+          <div class="index_main_2_Picker_sum">
+            <a href="#"
+              ><img
+                src="./images/color_picker/color_1.png"
+                alt="Picker"
+                class="Pickerimg"
+                onclick="coloursearch('red')"
+            /></a>
+            <a href="#"
+              ><img
+                src="./images/color_picker/color_2.png"
+                alt="Picker"
+                class="Pickerimg"
+                onclick="coloursearch('green')"
+            /></a>
+            <a href="#"
+              ><img
+                src="./images/color_picker/color_3.png"
+                alt="Picker"
+                class="Pickerimg"
+                onclick="coloursearch('yellow')"
+            /></a>
+            <a href="#"
+              ><img
+                src="./images/color_picker/color_4.png"
+                alt="Picker"
+                class="Pickerimg"
+                onclick="coloursearch('blue')"
+            /></a>
+            <a href="#"
+              ><img
+                src="./images/color_picker/color_5.png"
+                alt="Picker"
+                class="Pickerimg"
+                onclick="coloursearch('white')"
+            /></a>
+            <a href="#"
+              ><img
+                src="./images/color_picker/color_6.png"
+                alt="Picker"
+                class="Pickerimg"
+                onclick="coloursearch('purple')"
+            /></a>
+            <a href="#"
+              ><img
+                src="./images/color_picker/color_7.png"
+                alt="Picker"
+                class="Pickerimg"
+                onclick="coloursearch('black')"
+            /></a>
+          </div>
+        </div>
+        <div class="index_main_2_osusume">
+          <img src="./images/title_osusume.png" alt="おすすめ" />
+        </div>
+        <div class="index_main_2_other">
+          <a href="#" class="index_main_2_other_element">
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/ohana-project-d6621.appspot.com/o/dahlia%2Fdahlia1.jpg?alt=media&token=5c0b0593-bf80-47f6-b9d8-775c73901160"
+              alt="ダリア"
+            />
+            <p class="index_main_2_other_element_1">ダリア</p>
+            <div class="index_main_2_other_element_border"></div>
+            <p class="index_main_2_other_element_2">1000￥</p>
+          </a>
+          <div class="index_main_2_other_element">
+            <a href="#" class="index_main_2_other_element">
+              <img
+                src="https://firebasestorage.googleapis.com/v0/b/ohana-project-d6621.appspot.com/o/rose%2Frose3.jpg?alt=media&token=30942b54-4c40-4aa4-80eb-27752c82fdf3"
+                alt="薔薇"
+              />
+              <p class="index_main_2_other_element_1">バラ</p>
+              <div class="index_main_2_other_element_border"></div>
+              <p class="index_main_2_other_element_2">1000￥</p>
+            </a>
+          </div>
+          <div class="index_main_2_other_element">
+            <a href="#" class="index_main_2_other_element">
+              <img
+                src="https://firebasestorage.googleapis.com/v0/b/ohana-project-d6621.appspot.com/o/tulips%2Ftulips4.jpg?alt=media&token=71519162-3403-4687-b5d9-adbb90cd46b1"
+                alt="チューリップ"
+              />
+              <p class="index_main_2_other_element_1">チューリップ</p>
+              <div class="index_main_2_other_element_border"></div>
+              <p class="index_main_2_other_element_2">1000￥</p>
+            </a>
+          </div>
+        </div>
+        <div class="index_main_2_tips">
+          <img src="./images/tips.jpg" alt="tips" />
+        </div>
+        <div class="index_main_2_search">
+          <form>
+            <input
+              type="text"
+              class="index_main_2_search_text"
+              id="searchtext"
+              onsubmit="textsearch()"
+            />
+            <input
+              type="button"
+              value="検索"
+              class="index_main_2_search_btn"
+              onclick="textsearch()"
+            />
+          </form>
+        </div>
+      </div>
+    </main>
+    <footer class="index_footer"></footer>
+    <script>
+      window.addEventListener("load", async () => {
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const snap = await db.collection("users").get();
+        let size = snap.size;
+        await auth.onAuthStateChanged(function (user) {
+          if (user) {
+            db.collection("users")
+              .where("uid", "==", user.uid)
+              .get()
+              .then((D) => {
+                if (D.size == 0) {
+                  console.log("ルナだよ");
+                  db.collection("users")
+                    .add({
+                      ID: size + 1, //ユーザーID
+                      Name: user.displayName, //ユーザーネーム
+                      cart: [], //カート
+                      uid: user.uid,
+                    })
+                    .then(() => {
+                      console.log("書き込み成功");
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                } else {
+                  console.log("ルナじゃないよ");
+                }
+              })
+              .catch(() => {});
+            userEmail = user.uid;
+            console.log(userEmail);
+          } else {
+            console.log("no login");
+          }
+        });
+      });
+
+      //ログアウト用////////////////////////////////////////////////////////////////////////////////////
+      document.getElementById("logout").addEventListener("click", async () => {
+        firebase
+          .auth()
+          .signOut()
+          .then(() => {
+            console.log("ログアウトしました");
+          })
+          .catch((error) => {
+            console.log(`ログアウト時にエラーが発生しました (${error})`);
+          });
+      });
+
+      function coloursearch(p) {
+        location.href = "/search.html?" + p;
+      }
+
+      function textsearch() {
+        var pram = document.getElementById("searchtext").value;
+        location.href = "/search.html?" + pram;
+      }
+    </script>
+    <script src="./js/main.js"></script>
+  </body>
+</html>
